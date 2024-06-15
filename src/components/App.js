@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import Die from "./Die.js";
 
 export default function App() {
-    //creating 10 random die components with random values
+    //creating array of objects which describe the 10 dies
     function allNewDice() {
         const newDice = [];
         for (let i = 0; i < 10; i++) {
-            newDice.push(Math.floor(Math.random() * 6) + 1);
+            const randomNum = Math.floor(Math.random() * 6) + 1;
+            newDice.push({ value: randomNum, isHeld: false });
         }
         return newDice;
     }
@@ -14,13 +15,24 @@ export default function App() {
     const [dice, setDice] = useState(() => allNewDice());
 
     //map over the state variable dice to create 10 Die components
-    const dieElements = dice.map((dieVal, index) => {
-        return <Die key={index} value={dieVal} />;
+    const dieElements = dice.map((die, index) => {
+        return <Die key={index} value={die.value} />;
     });
 
-    //update the state with new random values of dice
+    //update the state with new random values of dice when roll is clicked
     function rollDice() {
-        setDice(() => allNewDice());
+        //only roll those dice which are not held
+        setDice((prevValue) => {
+            return prevValue.map((die) => {
+                //held then simply no change else change value property to random dice number
+                if (die.isHeld) {
+                    return { ...die };
+                } else {
+                    const randomNum = Math.floor(Math.random() * 6) + 1;
+                    return { ...die, value: randomNum };
+                }
+            });
+        });
     }
 
     return (

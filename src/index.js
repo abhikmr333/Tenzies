@@ -5,5 +5,5 @@ import "./style.css";
 
 const rootNode = document.querySelector("#root");
 const root = createRoot(rootNode);
-console.log(root);
+// console.log(root);
 root.render(<App />);

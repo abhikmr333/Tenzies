@@ -57,4 +57,13 @@ body {
     background-color: #5035ff;
     border-radius: 0.3rem;
     box-shadow: 0px 3.2px 7.68px 0px #0000002e;
+    cursor: pointer;
+}
+
+.game--roll-btn:active {
+    box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}
+
+.hold-dice {
+    background-color: #59e391;
 }
