@@ -18,13 +18,20 @@ export default function App() {
         return <Die key={index} value={dieVal} />;
     });
 
+    //update the state with new random values of dice
+    function rollDice() {
+        setDice(() => allNewDice());
+    }
+
     return (
         <main className="game">
             <section className="game--die-container">
                 {/*displaying the list of 10 die components*/}
                 {dieElements}
             </section>
-            <button className="game--roll-btn">Roll</button>
+            <button onClick={rollDice} className="game--roll-btn">
+                Roll
+            </button>
         </main>
     );
 }
