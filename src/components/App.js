@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Die from "./Die.js";
 //using nanoid to generate random ids to use as key prop
 import { nanoid } from "nanoid";
+//rendering confetti if the user wins the game
+import Confetti from "react-confetti";
 
 export default function App() {
     //creating array of objects which describe the 10 dies
@@ -16,6 +18,20 @@ export default function App() {
     }
     //set array of 10 random dice numbers as lazy state initialization
     const [dice, setDice] = useState(() => allNewDice());
+
+    //state to represent whether the user has won the game or not?
+    const [tenzies, setTenzies] = useState(false);
+
+    //everytime the dice array changes run the effect
+    useEffect(() => {
+        //winning condition - if all the die are held and all their values are same then user wins
+        const allHeld = dice.every((die) => die.isHeld);
+        //compare value of first die with all the die
+        const allEqual = dice.every((die) => dice[0].value === die.value);
+        if (allHeld && allEqual) {
+            setTenzies(() => true);
+        }
+    }, [dice]);
 
     function holdDie(dieId) {
         //toggling the isHeld property
@@ -43,6 +59,13 @@ export default function App() {
 
     //update the state with new random values of dice when roll is clicked
     function rollDice() {
+        //if the game is over then rollDice again set tenzies to false
+        if (tenzies) {
+            setDice(() => allNewDice());
+            setTenzies(() => false);
+            return;
+        }
+
         //updating state value and only roll those dice which are not held
         setDice((prevDice) => {
             return prevDice.map((die) => {
@@ -59,6 +82,7 @@ export default function App() {
 
     return (
         <main className="game">
+            {tenzies && <Confetti />}
             <h1 className="game--title">Tenzies</h1>
             <p className="game--instructions">
                 Roll until all dice are the same. Click each die to freeze it at
@@ -69,7 +93,7 @@ export default function App() {
                 {dieElements}
             </section>
             <button onClick={rollDice} className="game--roll-btn">
-                Roll
+                {tenzies ? "New Game" : "Roll"}
             </button>
         </main>
     );
