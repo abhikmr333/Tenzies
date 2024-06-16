@@ -17,18 +17,15 @@ export default function App() {
     //set array of 10 random dice numbers as lazy state initialization
     const [dice, setDice] = useState(() => allNewDice());
 
-    //holdDie function which will change the value of isHeld from true to false
-    function holdDie(dieId, isHeld) {
-        //toggling the isHeld to true after searching the die using id if it is not held
-        if (!isHeld) {
-            setDice((prevDice) => {
-                return prevDice.map((prevDie) => {
-                    return dieId === prevDie.id
-                        ? { ...prevDie, isHeld: true }
-                        : { ...prevDie };
-                });
+    function holdDie(dieId) {
+        //toggling the isHeld property
+        setDice((prevDice) => {
+            return prevDice.map((prevDie) => {
+                return dieId === prevDie.id
+                    ? { ...prevDie, isHeld: !prevDie.isHeld }
+                    : { ...prevDie };
             });
-        }
+        });
     }
 
     //map over the state variable dice to create 10 Die components
@@ -62,6 +59,11 @@ export default function App() {
 
     return (
         <main className="game">
+            <h1 className="game--title">Tenzies</h1>
+            <p className="game--instructions">
+                Roll until all dice are the same. Click each die to freeze it at
+                its current value between rolls.
+            </p>
             <section className="game--die-container">
                 {/*displaying the list of 10 die components*/}
                 {dieElements}
